@@ -32,6 +32,4 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         response.getWriter().print(returnObj.toString());
         response.getWriter().flush();
     }
-
-
 }
