@@ -1,15 +1,14 @@
 package pres.jeremy.security.config;
 
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pres.jeremy.security.filter.AuthenticationSuccessHandler;
 import pres.jeremy.security.filter.MyAuthenticationFailureHandler;
 import pres.jeremy.security.filter.VerificationCodeFilter;
 
@@ -30,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/myLogin.html")
+                .successHandler(authenticationSuccessHandler())
+                .failureHandler(myAuthenticationFailureHandler())
                 .loginProcessingUrl("/auth/form").permitAll()
                 .failureHandler(new MyAuthenticationFailureHandler());
         http.addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -38,5 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public static AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new AuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public static MyAuthenticationFailureHandler myAuthenticationFailureHandler() {
+        return new MyAuthenticationFailureHandler();
     }
 }
