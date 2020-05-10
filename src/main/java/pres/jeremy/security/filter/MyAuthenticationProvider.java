@@ -24,9 +24,12 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         MyWebAuthenticationDetails details = (MyWebAuthenticationDetails) authentication.getDetails();
-        if (!details.isImageCodeIsRight()) {
-            throw new VerificationCodeException();
-        }
+        Object object = authentication.getDetails();
+        log.info("details : {}", object);
+
+//        if (!details.isImageCodeIsRight()) {
+//            throw new VerificationCodeException();
+//        }
         super.additionalAuthenticationChecks(userDetails, authentication);
     }
 }
